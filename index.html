@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Website</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>My Personal Website</h1>
+      <nav>
+        <ul>
+          <li><a href="#about">About Me</a></li>
+          <li><a href="#game">Play Game</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="container">
+      <h2>About Me</h2>
+      <div class="profile">
+        <img src="MELO.jpeg" alt="My Picture">
+        <p>Hello,
+            My name is Melisa Güzelgöz. I am 21 years old. And I study international relations at Bilkent University in Ankara, Turkey. My hobbies are annoying Parsa and playing tennis. My dream job is to be Turkey's representative at the UN.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="game">
+    <div class="container">
+      <h2>Play Game</h2>
+      <div class="game">
+        <p>This is where you can play a basic game. You can customize this section with your preferred game or interactive content.</p>
+        <div id="word-container">
+          <p id="word-display"></p>
+          <input type="text" id="guess-input" placeholder="Enter a letter">
+          <button id="guess-button">Guess</button>
+          <p id="message"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="game.js"></script>
+
+  <section id="contact">
+    <div class="container">
+      <h2>Contact</h2>
+      <p>You can reach me at ayten.guzelgoz@ug.bilkent.edu.tr</p>
+    </div>
+  </section>
+</body>
+</html>
