@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Paper Scissors</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  #result {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .choices {
+    margin-top: 20px;
+  }
+  .choice-button {
+    font-size: 18px;
+    margin: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<section id="game">
+  <div class="container">
+    <h2>Rock Paper Scissors</h2>
+    <p>Make your choice:</p>
+    <div class="choices">
+      <button class="choice-button" id="rock">Rock</button>
+      <button class="choice-button" id="paper">Paper</button>
+      <button class="choice-button" id="scissors">Scissors</button>
+    </div>
+    <p id="result"></p>
+    <button id="back-button">Back to Home</button> <!-- Added button -->
+  </div>
+</section>
+
+<script>
+  const choices = ['rock', 'paper', 'scissors'];
+  const resultDisplay = document.getElementById('result');
+
+  // Function to generate computer's choice
+  function computerChoice() {
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
+  }
+
+  // Function to determine the winner
+  function determineWinner(playerChoice, computerChoice) {
+    if (playerChoice === computerChoice) {
+      return "It's a tie!";
+    } else if (
+      (playerChoice === 'rock' && computerChoice === 'scissors') ||
+      (playerChoice === 'paper' && computerChoice === 'rock') ||
+      (playerChoice === 'scissors' && computerChoice === 'paper')
+    ) {
+      return 'You win!';
+    } else {
+      return 'Computer wins!';
+    }
+  }
+
+  // Function to handle player's choice
+  function handlePlayerChoice(playerChoice) {
+    const computer = computerChoice();
+    const winner = determineWinner(playerChoice, computer);
+    resultDisplay.textContent = `You chose ${playerChoice}. Computer chose ${computer}. ${winner}`;
+  }
+
+  // Event listeners for choice buttons
+  document.getElementById('rock').addEventListener('click', () => {
+    handlePlayerChoice('rock');
+  });
+
+  document.getElementById('paper').addEventListener('click', () => {
+    handlePlayerChoice('paper');
+  });
+
+  document.getElementById('scissors').addEventListener('click', () => {
+    handlePlayerChoice('scissors');
+  });
+
+    // Event listener for back button
+    document.getElementById('back-button').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirect to index.html
+  });
+</script>
+
+</body>
+</html>

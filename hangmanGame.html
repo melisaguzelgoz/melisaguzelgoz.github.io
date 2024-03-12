@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hangman Game</title>
+<style>
+  #word-display {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  #hangman-display {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .stickman-part {
+    stroke: black;
+    stroke-width: 2;
+    fill: none;
+  }
+</style>
+</head>
+<body>
+
+<section id="game">
+  <div class="container">
+    <h2>Guess the letters</h2>
+    <div class="game">
+      <div id="word-container">
+        <p id="word-display"></p>
+        <input type="text" id="guess-input" placeholder="Enter a letter">
+        <button id="guess-button">Guess</button>
+        <p id="message"></p>
+        <button id="back-button">Back to Home</button> <!-- Added button -->
+      </div>
+      <svg id="hangman-display" width="120" height="200"></svg> <!-- Hangman display -->
+    </div>
+  </div>
+</section>
+
+<script>
+  // Define a list of words
+  const words = [
+    'elma', 'armut', 'portakal', 'çilek', 'mandalina',
+    'karpuz', 'muz', 'kiraz', 'kivi', 'nar',
+    'kavun', 'üzüm', 'limon', 'erik', 'şeftali',
+    'vişne', 'böğürtlen', 'kayısı', 'mango', 'hurma',
+    'ayva', 'dut', 'ceviz', 'hindistancevizi', 'ananas',
+    'kırmızıbiber', 'patates', 'domates', 'havuç', 'soğan',
+    'salatalık', 'marul', 'pırasa', 'kabak', 'bezelye',
+    'fasulye', 'ıspanak', 'brokoli', 'kuşkonmaz', 'karnabahar',
+    'kereviz', 'sarımsak', 'roka', 'maydanoz', 'dereotu',
+    'kekik', 'nane', 'tarçın', 'zencefil', 'kimyon',
+    'biberiye', 'fesleğen', 'karabiber', 'hardal', 'defne yaprağı',
+    'tuz', 'şeker', 'un', 'pirinç', 'makarna',
+    'bulgur', 'nohut', 'mercimek', 'fasulye', 'barbunya',
+    'soğan', 'sarımsak', 'zeytin', 'zeytinyağı', 'pekmez',
+    'nar ekşisi', 'yoğurt', 'peynir', 'süt', 'yumurta',
+    'ekmek', 'kahve', 'çay', 'su', 'soda',
+    'meyve suyu', 'şarap', 'bira', 'rakı', 'viski',
+    'likör', 'cin', 'votka', 'tekila', 'şampanya'
+  ];
+
+  // Select a random word
+  let word = words[Math.floor(Math.random() * words.length)];
+
+  // Track guessed letters
+  let guessedLetters = [];
+
+  // Initialize word display
+  let wordDisplay = '';
+  for (let i = 0; i < word.length; i++) {
+    wordDisplay += '_ ';
+  }
+  document.getElementById('word-display').textContent = wordDisplay;
+
+  // Hangman display parts
+  const hangmanParts = [
+    '<circle class="stickman-part" cx="60" cy="40" r="20"/>', // Head
+    '<line class="stickman-part" x1="60" y1="60" x2="60" y2="140"/>', // Body
+    '<line class="stickman-part" x1="60" y1="80" x2="30" y2="100"/>', // Left Arm
+    '<line class="stickman-part" x1="60" y1="80" x2="90" y2="100"/>', // Right Arm
+    '<line class="stickman-part" x1="60" y1="140" x2="30" y2="180"/>', // Left Leg
+    '<line class="stickman-part" x1="60" y1="140" x2="90" y2="180"/>' // Right Leg
+  ];
+
+  // Function to update hangman display
+  function updateHangmanDisplay(incorrectGuesses) {
+    const hangmanDisplay = document.getElementById('hangman-display');
+    hangmanDisplay.innerHTML = '';
+    for (let i = 0; i < incorrectGuesses; i++) {
+      hangmanDisplay.innerHTML += hangmanParts[i];
+    }
+  }
+
+  // Function to check if the hangman is dead
+  function isHangmanDead(incorrectGuesses) {
+    return incorrectGuesses >= hangmanParts.length;
+  }
+
+  // Event listener for guessing
+  document.getElementById('guess-button').addEventListener('click', function() {
+    let guess = document.getElementById('guess-input').value.toLowerCase();
+
+    // Check if the guessed letter is valid (including Turkish letters)
+    if (!guess.match(/[a-zA-ZçÇğĞıİöÖşŞüÜ]/)) {
+      document.getElementById('message').textContent = 'Please enter a valid letter!';
+      return;
+    }
+
+    // Check if the letter has already been guessed
+    if (guessedLetters.includes(guess)) {
+      document.getElementById('message').textContent = 'You already guessed that letter!';
+      return;
+    }
+
+    // Add guessed letter to the list
+    guessedLetters.push(guess);
+
+    // Empty the input box after each guess
+    document.getElementById('guess-input').value = '';
+
+    // Check if the guessed letter is in the word
+    if (word.includes(guess)) {
+      // Update word display with correctly guessed letters
+      let newWordDisplay = '';
+      for (let i = 0; i < word.length; i++) {
+        if (guessedLetters.includes(word[i])) {
+          newWordDisplay += word[i] + ' ';
+        } else {
+          newWordDisplay += '_ ';
+        }
+      }
+      document.getElementById('word-display').textContent = newWordDisplay;
+
+      // Check if the word has been fully guessed
+      if (!newWordDisplay.includes('_')) {
+        alert('Congratulations! You guessed the word!');
+        location.reload(); // Refresh the page
+      }
+    } else {
+      // Increase incorrect guesses count and update hangman display
+      let incorrectGuesses = guessedLetters.filter(letter => !word.includes(letter)).length;
+      updateHangmanDisplay(incorrectGuesses);
+
+      // Check if the hangman is dead after the hangman is fully drawn
+      if (isHangmanDead(incorrectGuesses)) {
+        setTimeout(function() {
+          alert('Game over! The word was: ' + word);
+          location.reload(); // Refresh the page
+        }, 500); // Delay alert to ensure hangman is fully drawn
+      }
+
+      // Decrease remaining attempts and display message
+      document.getElementById('message').textContent = 'Incorrect guess. Try again!';
+    }
+  });
+
+  // Event listener for back button
+  document.getElementById('back-button').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirect to index.html
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 5px;
+  }
+  .cell {
+    width: 100px;
+    height: 100px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<section id="game">
+  <div class="container">
+    <h2>Tic Tac Toe</h2>
+    <div class="board" id="board">
+      <div class="cell" data-index="0"></div>
+      <div class="cell" data-index="1"></div>
+      <div class="cell" data-index="2"></div>
+      <div class="cell" data-index="3"></div>
+      <div class="cell" data-index="4"></div>
+      <div class="cell" data-index="5"></div>
+      <div class="cell" data-index="6"></div>
+      <div class="cell" data-index="7"></div>
+      <div class="cell" data-index="8"></div>
+    </div>
+    <p id="result"></p>
+    <button id="reset-button">Reset Game</button>
+    <button id="back-button">Back to Home</button> <!-- Added button -->
+  </div>
+</section>
+
+<script>
+  const cells = document.querySelectorAll('.cell');
+  const resultDisplay = document.getElementById('result');
+  const resetButton = document.getElementById('reset-button');
+  let currentPlayer = 'X';
+  let gameBoard = ['', '', '', '', '', '', '', '', ''];
+  let gameEnded = false;
+
+  // Function to handle cell click
+  function handleCellClick(index) {
+    if (gameEnded || gameBoard[index] !== '') return;
+
+    gameBoard[index] = currentPlayer;
+    cells[index].textContent = currentPlayer;
+
+    if (checkWin()) {
+      resultDisplay.textContent = `${currentPlayer} wins!`;
+      gameEnded = true;
+    } else if (checkDraw()) {
+      resultDisplay.textContent = "It's a draw!";
+      gameEnded = true;
+    } else {
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+  }
+
+  // Function to check for a win
+  function checkWin() {
+    const winConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6] // Diagonals
+    ];
+
+    for (let condition of winConditions) {
+      const [a, b, c] = condition;
+      if (gameBoard[a] !== '' && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // Function to check for a draw
+  function checkDraw() {
+    return !gameBoard.includes('');
+  }
+
+  // Function to reset the game
+  function resetGame() {
+    currentPlayer = 'X';
+    gameBoard = ['', '', '', '', '', '', '', '', ''];
+    gameEnded = false;
+    resultDisplay.textContent = '';
+    cells.forEach(cell => cell.textContent = '');
+  }
+
+  // Event listeners for cell clicks
+  cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+      handleCellClick(parseInt(cell.getAttribute('data-index')));
+    });
+  });
+
+  // Event listener for reset button
+  resetButton.addEventListener('click', resetGame);
+  
+    // Event listener for back button
+    document.getElementById('back-button').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirect to index.html
+  });
+</script>
+
+</body>
+</html>

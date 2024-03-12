@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess the Number</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  #result {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<section id="game">
+  <div class="container">
+    <h2>Guess the Number</h2>
+    <p>Guess a number between 1 and 100:</p>
+    <input type="number" id="guess-input">
+    <button id="guess-button">Guess</button>
+    <p id="result"></p>
+    <button id="back-button">Back to Home</button> <!-- Added button -->
+  </div>
+</section>
+
+<script>
+  // Generate a random number between 1 and 100
+  const randomNumber = Math.floor(Math.random() * 100) + 1;
+
+  // Function to handle guess
+  function handleGuess() {
+    const guess = parseInt(document.getElementById('guess-input').value);
+
+    if (isNaN(guess) || guess < 1 || guess > 100) {
+      document.getElementById('result').textContent = 'Please enter a valid number between 1 and 100.';
+      return;
+    }
+
+    if (guess === randomNumber) {
+      document.getElementById('result').textContent = 'Congratulations! You guessed the number!';
+    } else if (guess < randomNumber) {
+      document.getElementById('result').textContent = 'Too low! Try a higher number.';
+    } else {
+      document.getElementById('result').textContent = 'Too high! Try a lower number.';
+    }
+  }
+
+  // Event listener for guess button
+  document.getElementById('guess-button').addEventListener('click', handleGuess);
+
+  // Event listener for Enter keypress
+  document.getElementById('guess-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      handleGuess();
+    }
+  });
+
+    // Event listener for back button
+    document.getElementById('back-button').addEventListener('click', function() {
+    window.location.href = 'index.html'; // Redirect to index.html
+  });
+</script>
+
+</body>
+</html>
